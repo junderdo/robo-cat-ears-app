@@ -30,6 +30,7 @@ _Avoid_: preset, pattern, theme
 
 **Working lighting**:
 The lighting the Glow tab is editing. While connected it is what the ears show; it is **unsaved** when no lighting profile holds it.
+It is **edited** when it is unsaved but started from a lighting profile, which it keeps a link to.
 
 **Apply**:
 To write a lighting to the ears.
