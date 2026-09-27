@@ -36,12 +36,10 @@ A parity spec, plus lighting profiles: every capability of the watch app (junder
 - [How do the Ears tab and servo calibration behave?](https://trello.com/c/N5ewRB6J): the tab shows label, serial, and app version, with no firmware version since the ears send none. Calibration is ±15° per axis with slider and −/+, read and re-centred on open, sent on release, kept on back, with Revert and Reset to zero; auto-animate is left alone. [ADR 0007](../adrs/0007-servo-calibration-is-live-with-revert-and-the-ears-tab-drops-firmware-version.md)
 - [How do the ears report their current lighting and auto-animate state without breaking the watch?](https://trello.com/c/EzPeS7Z2): a new store sub-opcode, `0x08` GET_STATE, answers with a fixed 103-byte auto-animate and lighting payload. The phone sends it on every connect after CAPABILITY, and `UNSUPPORTED_OPCODE` means out-of-date firmware. The ears also restore auto-animate at boot, and the watch needs no update. [ADR 0008](../adrs/0008-the-ears-report-their-state-through-a-get-state-store-request.md)
 - [How are lighting profiles created, named, and managed?](https://trello.com/c/rQhgGHYf): from a profile bar at the top of Glow that opens a sheet. Edits show as "<name> · edited" with Revert and Save, and the link survives restarts. Pick, overwrite, and delete undo from a snackbar; names are unique, up to 24 characters; no cap, drag to reorder, no starters. [ADR 0009](../adrs/0009-profiles-are-managed-from-a-bar-on-glow-and-edits-stay-linked-to-their-profile.md)
+- [How does the Glow tab behave in each of its states?](https://trello.com/c/9TNiYRbD): one scrolling page below the profile bar: colours, mode chips, speed (disabled in Solid), brightness. Tap a swatch to edit it in a live picker sheet where Cancel reverts; drag reorders on drop; delete undoes; 1 to 32 colours. Lighting writes go latest-wins, one in flight. [ADR 0010](../adrs/0010-glow-edits-colours-in-a-live-picker-and-writes-latest-wins.md)
 
 ## Not yet specified
 
-- Whether a screen prototype is worth building before the per-screen specs, now that the layout is decided.
-- How the Dart protocol layer is tested, possibly with test vectors drawn from the protocol doc, and how the phone waits out iOS's early MTU of 23 before CAPABILITY (poll or re-issue).
-- Slicing the decided behavior into implementation cards, including the `ears-firmware` card for GET_STATE and the auto-animate restore at boot ([ADR 0008](../adrs/0008-the-ears-report-their-state-through-a-get-state-store-request.md)).
 - Ears firmware: the auto-animate task and a played animation can drive the servos at the same time, with nothing making one wait. Affects the watch too; no phone decision depends on it yet.
 
 ## Out of scope
