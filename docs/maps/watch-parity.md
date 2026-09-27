@@ -4,7 +4,7 @@ Trello card: [Phone app parity with the watch](https://trello.com/c/QfT0bxox)
 
 ## Destination
 
-A parity spec: every capability of the watch app (junderdo/robo-cat-ears-watch) has decided phone-native behavior and is sliced into vertical `mobile-app` implementation cards, with nothing left to decide before building.
+A parity spec, plus lighting profiles: every capability of the watch app (junderdo/robo-cat-ears-watch), and saved lighting profiles, has decided phone-native behavior and is sliced into vertical implementation cards, with nothing left to decide before building.
 
 ## Notes
 
@@ -14,9 +14,11 @@ A parity spec: every capability of the watch app (junderdo/robo-cat-ears-watch) 
   - **Animate**: the auto-animate toggle, the 8 built-in animations, and playing animations stored on the ears, with their loading, empty, stale, and error states.
   - **Glow**: up to 32 colours to add, reorder, and delete, with a colour picker; 5 modes plus speed; brightness applied on the phone with gamma; colours and brightness saved on the phone.
   - **Servo calibration**: four axes, sent live.
+  - **Lighting profiles**: beyond the watch, added by [ADR 0003](../adrs/0003-lighting-lives-in-per-phone-profiles.md).
 - Android and iOS from one BLE stack; `flutter_blue_plus` fits the protocol, pending its licence. Test hardware: an Android phone and a Mac; no iPhone, so iOS BLE behavior is specified but verified later.
 - The wire contract is `robo-cat-ears/docs/ble-protocol.md`. The ears accept one controller at a time, so the phone and the watch cannot both be connected.
 - Watch reference: `robo-cat-ears-watch/components/brookesia_app_robo_cat_ears/` (screens) and `components/services/` (BLE, animation store, lighting). Related ADRs live in `milk-lab-creations/docs/adr/`.
+- Pre-1.0: the phone may require current ears firmware, and firmware changes are in scope where a decision needs them. Ears firmware tickets carry the `ears-firmware` label too. The shipped watch must keep working, through a companion watch update if needed.
 - Grilling tickets use the `grilling` and `domain-modeling` skills. Every resolved decision gets an ADR in `docs/adrs/`; research lands in `docs/research/`.
 
 ## Decisions so far
@@ -25,6 +27,7 @@ A parity spec: every capability of the watch app (junderdo/robo-cat-ears-watch) 
 - [How does flutter_blue_plus handle the ears protocol on Android and iOS?](https://trello.com/c/YfneC3gc): it covers the whole protocol unmodified. Chunk by CAPABILITY's `max_chunk_bytes`, never long writes; identity is the address on Android but a per-phone UUID on iOS, so only the CAPABILITY serial is shared across controllers; a background auto-connect would lock the watch out. [Research](../research/flutter-blue-plus-ears-protocol.md)
 - [How do the phone and watch share the ears' single connection?](https://trello.com/c/LIaROpUn): the phone holds the ears only in the foreground (15 s grace on Android, none on iOS), auto-connects once on open, retries 30 s after a drop, shows busy ears as "not found", and an explicit disconnect turns off auto-connect. [ADR 0001](../adrs/0001-phone-holds-the-ears-only-in-the-foreground.md)
 - [How are the four capabilities laid out as phone screens?](https://trello.com/c/xlsoi2vr): Connect is a gate, and the controls sit behind it in a bottom navigation bar, Animate | Glow | Ears. Ears holds Disconnect and a full-page servo calibration; every not-connected state lives on the gate; portrait-only phone layouts. [ADR 0002](../adrs/0002-controls-sit-behind-a-connect-gate.md)
+- [Are saved glow colours and brightness per phone or per ears?](https://trello.com/c/gGiccVK5): per phone, as named lighting profiles. Glow edits write live; on connect the phone reads the ears' lighting and auto-animate through a new firmware read, and asks before replacing unsaved lighting; ears without the read are out of date. [ADR 0003](../adrs/0003-lighting-lives-in-per-phone-profiles.md)
 
 ## Not yet specified
 
@@ -38,6 +41,6 @@ A parity spec: every capability of the watch app (junderdo/robo-cat-ears-watch) 
 - Watch-hardware behavior: idle dim and screen-off power steps, screen brightness, watch battery and PMU readings, wrist flick, the power button.
 - The watch's "Ears Sys Info" panel, a placeholder until the ears send power data.
 - Web-app-only features: streaming a custom animation (0x05) and a timeline editor.
-- Backlog ideas the watch doesn't have: renaming the ears, saving and loading lighting patterns, gyro motion control, voice or music control, syncing with nearby ears.
-- Ears firmware changes, such as accepting more than one controller, or advertising a busy state so a phone could show it.
+- Backlog ideas the watch doesn't have: renaming the ears, gyro motion control, voice or music control, syncing with nearby ears.
+- Ears firmware changes no decision needs, such as accepting more than one controller, or advertising a busy state so a phone could show it.
 - The watch reconnecting after its own Disconnect button: its disconnection callback starts the 5 s reconnect timer on every disconnect. A watch bug, not phone work.

@@ -19,3 +19,17 @@ _Avoid_: saved device, paired ears
 **Connect gate**:
 The screen the app shows whenever no ears are connected; the controls are reachable only past it.
 _Avoid_: scan screen, home screen
+
+**Lighting**:
+What the ears' LEDs show: colours, mode, speed, and brightness.
+_Avoid_: glow settings, pattern
+
+**Lighting profile**:
+A named lighting saved on the phone.
+_Avoid_: preset, pattern, theme
+
+**Working lighting**:
+The lighting the Glow tab is editing. While connected it is what the ears show; it is **unsaved** when no lighting profile holds it.
+
+**Apply**:
+To write a lighting to the ears.
