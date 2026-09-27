@@ -30,11 +30,12 @@ A parity spec, plus lighting profiles: every capability of the watch app (junder
 - [Are saved glow colours and brightness per phone or per ears?](https://trello.com/c/gGiccVK5): per phone, as named lighting profiles. Glow edits write live; on connect the phone reads the ears' lighting and auto-animate through a new firmware read, and asks before replacing unsaved lighting; ears without the read are out of date. [ADR 0003](../adrs/0003-lighting-lives-in-per-phone-profiles.md)
 - [Amend the BLE protocol contract to admit a native phone client](https://trello.com/c/FuZ6FsUa): done. The phone is a supported, play-only client with no wire change; §13 now rules out only the web app on iOS. `robo-cat-ears/docs/ble-protocol.md` and `milk-lab-creations/docs/adr/0003-a-native-phone-app-is-a-supported-client.md`, on each repo's `docs/phone-client-contract` branch
 - [Which BLE plugin carries the ears protocol, given flutter_blue_plus's licence?](https://trello.com/c/3gG1mEVn): `universal_ble` (BSD-3). flutter_blue_plus 2.x's licence adds restrictions GPL-3.0 forbids, so it can't ship in this app, for-profit or not. [ADR 0004](../adrs/0004-universal-ble-carries-the-ears-protocol.md)
+- [How does universal_ble handle the ears protocol on Android and iOS?](https://trello.com/c/i0TL3bnJ): it carries the whole protocol unmodified with its default global queue, but the app must request the Android MTU, keep every write within `max_chunk_bytes`, subscribe to indications explicitly, write ABF1 with response, and end every failed or timed-out connect with `disconnect()` or iOS grabs the ears later. [Research](../research/universal-ble-ears-protocol.md)
 
 ## Not yet specified
 
 - Whether a screen prototype is worth building before the per-screen specs, now that the layout is decided.
-- How the Dart protocol layer is tested, possibly with test vectors drawn from the protocol doc, and whether iOS settles its MTU before CAPABILITY is sent.
+- How the Dart protocol layer is tested, possibly with test vectors drawn from the protocol doc, and how the phone waits out iOS's early MTU of 23 before CAPABILITY (poll or re-issue).
 - Slicing the decided behavior into implementation cards.
 
 ## Out of scope
