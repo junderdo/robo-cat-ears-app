@@ -23,10 +23,11 @@ A parity spec: every capability of the watch app (junderdo/robo-cat-ears-watch) 
 
 - [Does reading ABF2 return the ears' current lighting, mode, and calibration state?](https://trello.com/c/HK9ZrdEY): no. Every read returns calibration, so the phone reads calibration from the ears and keeps lighting and auto-animate itself. [Research](../research/abf2-state-read.md)
 - [How does flutter_blue_plus handle the ears protocol on Android and iOS?](https://trello.com/c/YfneC3gc): it covers the whole protocol unmodified. Chunk by CAPABILITY's `max_chunk_bytes`, never long writes; identity is the address on Android but a per-phone UUID on iOS, so only the CAPABILITY serial is shared across controllers; a background auto-connect would lock the watch out. [Research](../research/flutter-blue-plus-ears-protocol.md)
+- [How do the phone and watch share the ears' single connection?](https://trello.com/c/LIaROpUn): the phone holds the ears only in the foreground (15 s grace on Android, none on iOS), auto-connects once on open, retries 30 s after a drop, shows busy ears as "not found", and an explicit disconnect turns off auto-connect. [ADR 0001](../adrs/0001-phone-holds-the-ears-only-in-the-foreground.md)
 
 ## Not yet specified
 
-- The detailed behavior of each capability screen: states, errors, debouncing, and how calibration's ±1000 wire range is presented. Waits on the screen layout and the shared-connection decisions.
+- The detailed behavior of each capability screen: states, errors, debouncing, and how calibration's ±1000 wire range is presented. Waits on the screen layout decision.
 - Whether a screen prototype is worth building before the per-screen specs.
 - How the Dart protocol layer is tested, possibly with test vectors drawn from the protocol doc, and whether iOS settles its MTU before CAPABILITY is sent.
 - Slicing the decided behavior into implementation cards.
@@ -37,4 +38,5 @@ A parity spec: every capability of the watch app (junderdo/robo-cat-ears-watch) 
 - The watch's "Ears Sys Info" panel, a placeholder until the ears send power data.
 - Web-app-only features: streaming a custom animation (0x05) and a timeline editor.
 - Backlog ideas the watch doesn't have: renaming the ears, saving and loading lighting patterns, gyro motion control, voice or music control, syncing with nearby ears.
-- Ears firmware changes, such as accepting more than one controller.
+- Ears firmware changes, such as accepting more than one controller, or advertising a busy state so a phone could show it.
+- The watch reconnecting after its own Disconnect button: its disconnection callback starts the 5 s reconnect timer on every disconnect. A watch bug, not phone work.
