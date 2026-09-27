@@ -32,12 +32,14 @@ A parity spec, plus lighting profiles: every capability of the watch app (junder
 - [Which BLE plugin carries the ears protocol, given flutter_blue_plus's licence?](https://trello.com/c/3gG1mEVn): `universal_ble` (BSD-3). flutter_blue_plus 2.x's licence adds restrictions GPL-3.0 forbids, so it can't ship in this app, for-profit or not. [ADR 0004](../adrs/0004-universal-ble-carries-the-ears-protocol.md)
 - [How does universal_ble handle the ears protocol on Android and iOS?](https://trello.com/c/i0TL3bnJ): it carries the whole protocol unmodified with its default global queue, but the app must request the Android MTU, keep every write within `max_chunk_bytes`, subscribe to indications explicitly, write ABF1 with response, and end every failed or timed-out connect with `disconnect()` or iOS grabs the ears later. [Research](../research/universal-ble-ears-protocol.md)
 - [What does the Connect gate show in each of its states?](https://trello.com/c/YKvGCEp6): it scans continuously around one pinned last-ears row whose status line changes. Ears are labelled by a scan-ID suffix, a connect times out at 10 s, "not found" is split from "couldn't connect", and Bluetooth off and permission denied are full-gate states. [ADR 0005](../adrs/0005-the-connect-gate-scans-continuously-around-a-pinned-last-ears-row.md)
+- [How does the Animate tab behave in each of its states?](https://trello.com/c/Jss7qdse): taps play with only a ripple and haptic tick, never a playing state. Auto-animate row, a built-in grid with labels fixed to what the firmware plays, then the stored list with loading, empty, and retryable failed states; stale plays show a snackbar and re-read the list. [ADR 0006](../adrs/0006-the-animate-tab-plays-without-a-playing-state.md)
 
 ## Not yet specified
 
 - Whether a screen prototype is worth building before the per-screen specs, now that the layout is decided.
 - How the Dart protocol layer is tested, possibly with test vectors drawn from the protocol doc, and how the phone waits out iOS's early MTU of 23 before CAPABILITY (poll or re-issue).
 - Slicing the decided behavior into implementation cards.
+- Ears firmware: the auto-animate task and a played animation can drive the servos at the same time, with nothing making one wait. Affects the watch too; no phone decision depends on it yet.
 
 ## Out of scope
 
@@ -48,3 +50,5 @@ A parity spec, plus lighting profiles: every capability of the watch app (junder
 - Backlog ideas the watch doesn't have: renaming the ears, gyro motion control, voice or music control, syncing with nearby ears.
 - Ears firmware changes no decision needs, such as accepting more than one controller, or advertising a busy state so a phone could show it.
 - The watch reconnecting after its own Disconnect button: its disconnection callback starts the 5 s reconnect timer on every disconnect. A watch bug, not phone work.
+- The watch's labels for built-ins 1/2 ("Right"/"Left") and 6/7 ("Radar"/"Curious") name the wrong animations. A watch bug; the phone labels them by what they play ([ADR 0006](../adrs/0006-the-animate-tab-plays-without-a-playing-state.md)).
+- A frequency control for auto-animate: the watch offers only on/off ([ADR 0006](../adrs/0006-the-animate-tab-plays-without-a-playing-state.md)).

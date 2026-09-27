@@ -33,3 +33,15 @@ The lighting the Glow tab is editing. While connected it is what the ears show; 
 
 **Apply**:
 To write a lighting to the ears.
+
+**Built-in animation**:
+One of the 8 animations built into the ears' firmware, always available.
+_Avoid_: preset, default animation
+
+**Stored animation**:
+An animation saved in one of the ears' slots, made in the web app. Its slot is its identity; names may repeat.
+_Avoid_: custom animation, saved animation
+
+**Auto-animate**:
+The ears playing a built-in animation on their own at intervals.
+_Avoid_: idle mode, animation mode
