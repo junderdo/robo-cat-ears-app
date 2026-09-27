@@ -21,6 +21,8 @@ A parity spec: every capability of the watch app (junderdo/robo-cat-ears-watch) 
 
 ## Decisions so far
 
+- [Does reading ABF2 return the ears' current lighting, mode, and calibration state?](https://trello.com/c/HK9ZrdEY): no. Every read returns calibration, so the phone reads calibration from the ears and keeps lighting and auto-animate itself. [Research](../research/abf2-state-read.md)
+
 ## Not yet specified
 
 - The detailed behavior of each capability screen: states, errors, debouncing, and how calibration's ±1000 wire range is presented. Waits on the screen layout and the shared-connection decisions.
