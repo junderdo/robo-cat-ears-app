@@ -45,3 +45,11 @@ _Avoid_: custom animation, saved animation
 **Auto-animate**:
 The ears playing a built-in animation on their own at intervals.
 _Avoid_: idle mode, animation mode
+
+**Servo calibration**:
+The ears' four per-axis offsets that correct each ear's resting position. Stored on the ears, shared by every controller.
+_Avoid_: trim, servo settings
+
+**Axis**:
+One direction an ear moves: side-to-side or up-down, on the left or right ear. The ears have four.
+_Avoid_: servo, azimuth, latitude
