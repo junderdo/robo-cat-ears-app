@@ -24,16 +24,17 @@ A parity spec: every capability of the watch app (junderdo/robo-cat-ears-watch) 
 - [Does reading ABF2 return the ears' current lighting, mode, and calibration state?](https://trello.com/c/HK9ZrdEY): no. Every read returns calibration, so the phone reads calibration from the ears and keeps lighting and auto-animate itself. [Research](../research/abf2-state-read.md)
 - [How does flutter_blue_plus handle the ears protocol on Android and iOS?](https://trello.com/c/YfneC3gc): it covers the whole protocol unmodified. Chunk by CAPABILITY's `max_chunk_bytes`, never long writes; identity is the address on Android but a per-phone UUID on iOS, so only the CAPABILITY serial is shared across controllers; a background auto-connect would lock the watch out. [Research](../research/flutter-blue-plus-ears-protocol.md)
 - [How do the phone and watch share the ears' single connection?](https://trello.com/c/LIaROpUn): the phone holds the ears only in the foreground (15 s grace on Android, none on iOS), auto-connects once on open, retries 30 s after a drop, shows busy ears as "not found", and an explicit disconnect turns off auto-connect. [ADR 0001](../adrs/0001-phone-holds-the-ears-only-in-the-foreground.md)
+- [How are the four capabilities laid out as phone screens?](https://trello.com/c/xlsoi2vr): Connect is a gate, and the controls sit behind it in a bottom navigation bar, Animate | Glow | Ears. Ears holds Disconnect and a full-page servo calibration; every not-connected state lives on the gate; portrait-only phone layouts. [ADR 0002](../adrs/0002-controls-sit-behind-a-connect-gate.md)
 
 ## Not yet specified
 
-- The detailed behavior of each capability screen: states, errors, debouncing, and how calibration's ±1000 wire range is presented. Waits on the screen layout decision.
-- Whether a screen prototype is worth building before the per-screen specs.
+- Whether a screen prototype is worth building before the per-screen specs, now that the layout is decided.
 - How the Dart protocol layer is tested, possibly with test vectors drawn from the protocol doc, and whether iOS settles its MTU before CAPABILITY is sent.
 - Slicing the decided behavior into implementation cards.
 
 ## Out of scope
 
+- Landscape and tablet layouts: the watch has nothing to match and the test hardware is one phone ([ADR 0002](../adrs/0002-controls-sit-behind-a-connect-gate.md)).
 - Watch-hardware behavior: idle dim and screen-off power steps, screen brightness, watch battery and PMU readings, wrist flick, the power button.
 - The watch's "Ears Sys Info" panel, a placeholder until the ears send power data.
 - Web-app-only features: streaming a custom animation (0x05) and a timeline editor.

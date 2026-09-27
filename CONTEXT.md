@@ -15,3 +15,7 @@ _Avoid_: client, central, host
 **Last ears**:
 The ears this phone most recently connected to by the user's choice.
 _Avoid_: saved device, paired ears
+
+**Connect gate**:
+The screen the app shows whenever no ears are connected; the controls are reachable only past it.
+_Avoid_: scan screen, home screen
