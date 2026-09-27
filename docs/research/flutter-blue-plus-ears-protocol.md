@@ -49,14 +49,15 @@ From `robo-cat-ears/docs/ble-protocol.md` and the firmware:
   set, which is what §9.1 requires before the first `0x06` request.
 - The OS stack sends the ATT confirmation for each indication. The app writes no code for it.
 - `onValueReceived` fires for `read()` results **and** for indications (README, "onValueReceived is
-  never called"). A lighting read of `ABF2` and a store response arrive on the same stream. Filter
-  on the leading type byte (`0x06` vs lighting), as the protocol intends (§1.2).
+  never called"). A read of `ABF2` and a store response arrive on the same stream. Filter
+  on the leading type byte, as the protocol intends (§1.2). With current ears firmware a read
+  always returns calibration (`0x03`), not lighting; see [abf2-state-read.md](abf2-state-read.md).
 - Subscriptions are cleared on disconnect and services must be rediscovered on every reconnect
   (`flutter_blue_plus.dart:502-517`; README, "Connect to a device"). That matches the protocol's
   rule to re-run the connect sequence every time.
 
 **For us:** no platform branches for indications. Wrap `ABF2` in one stream that splits
-`0x06` frames from lighting reads by their first byte.
+`0x06` frames from state reads by their first byte.
 
 ### 2. MTU and chunked writes: trust `max_chunk_bytes`, never `allowLongWrite`
 
