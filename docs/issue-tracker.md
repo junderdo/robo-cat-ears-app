@@ -26,7 +26,7 @@ Every map and ticket card carries `mobile-app` plus one wayfinding label:
 ### The map
 
 - One card, labelled `wayfinder:map`, in **Todo** while the map is live.
-- Its description is the map body: Destination, Notes, Decisions so far, Not yet specified, Out of scope. It is an index of one-line gists and links; the detail lives in the repo docs below, which keeps it within Trello's card description limit.
+- Its description is a one-line summary of the destination and a link to the map body in `docs/maps/`. The body lives in the repo because it outgrows Trello's card description limit.
 - A **Tickets** checklist on the map holds one item per child ticket: the ticket card's URL.
 
 ### Tickets
@@ -35,8 +35,8 @@ Every map and ticket card carries `mobile-app` plus one wayfinding label:
 - **Blocking**: the description's first line is `Blocked by: <card URL>, <card URL>`, or `Blocked by: none`. A ticket is unblocked when every card it names is in **Done**.
 - **Frontier**: cards labelled `mobile-app` and a `wayfinder:` ticket label, in **Todo**, unassigned, and unblocked.
 - **Claim**: assign the card to the dev driving the map and move it to **In Progress**, before any work.
-- **Resolve**: write the outcome into the repo (below), post a resolution comment with a one-line gist and the doc's path, move the card to **Done**, and tick its item on the map's **Tickets** checklist.
-- **Out of scope**: archive the card and add a line to the map's Out of scope section.
+- **Resolve**: write the outcome into the repo (below), post a resolution comment with a one-line gist and the doc's path, move the card to **Done**, tick its item on the map's **Tickets** checklist, and add the ticket to the map doc's Decisions so far.
+- **Out of scope**: archive the card and add a line to the map doc's Out of scope section.
 
 ### Outcomes live in the repo
 
