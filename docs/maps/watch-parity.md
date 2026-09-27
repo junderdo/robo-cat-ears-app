@@ -34,12 +34,13 @@ A parity spec, plus lighting profiles: every capability of the watch app (junder
 - [What does the Connect gate show in each of its states?](https://trello.com/c/YKvGCEp6): it scans continuously around one pinned last-ears row whose status line changes. Ears are labelled by a scan-ID suffix, a connect times out at 10 s, "not found" is split from "couldn't connect", and Bluetooth off and permission denied are full-gate states. [ADR 0005](../adrs/0005-the-connect-gate-scans-continuously-around-a-pinned-last-ears-row.md)
 - [How does the Animate tab behave in each of its states?](https://trello.com/c/Jss7qdse): taps play with only a ripple and haptic tick, never a playing state. Auto-animate row, a built-in grid with labels fixed to what the firmware plays, then the stored list with loading, empty, and retryable failed states; stale plays show a snackbar and re-read the list. [ADR 0006](../adrs/0006-the-animate-tab-plays-without-a-playing-state.md)
 - [How do the Ears tab and servo calibration behave?](https://trello.com/c/N5ewRB6J): the tab shows label, serial, and app version, with no firmware version since the ears send none. Calibration is ±15° per axis with slider and −/+, read and re-centred on open, sent on release, kept on back, with Revert and Reset to zero; auto-animate is left alone. [ADR 0007](../adrs/0007-servo-calibration-is-live-with-revert-and-the-ears-tab-drops-firmware-version.md)
+- [How do the ears report their current lighting and auto-animate state without breaking the watch?](https://trello.com/c/EzPeS7Z2): a new store sub-opcode, `0x08` GET_STATE, answers with a fixed 103-byte auto-animate and lighting payload. The phone sends it on every connect after CAPABILITY, and `UNSUPPORTED_OPCODE` means out-of-date firmware. The ears also restore auto-animate at boot, and the watch needs no update. [ADR 0008](../adrs/0008-the-ears-report-their-state-through-a-get-state-store-request.md)
 
 ## Not yet specified
 
 - Whether a screen prototype is worth building before the per-screen specs, now that the layout is decided.
 - How the Dart protocol layer is tested, possibly with test vectors drawn from the protocol doc, and how the phone waits out iOS's early MTU of 23 before CAPABILITY (poll or re-issue).
-- Slicing the decided behavior into implementation cards.
+- Slicing the decided behavior into implementation cards, including the `ears-firmware` card for GET_STATE and the auto-animate restore at boot ([ADR 0008](../adrs/0008-the-ears-report-their-state-through-a-get-state-store-request.md)).
 - Ears firmware: the auto-animate task and a played animation can drive the servos at the same time, with nothing making one wait. Affects the watch too; no phone decision depends on it yet.
 
 ## Out of scope
@@ -54,3 +55,4 @@ A parity spec, plus lighting profiles: every capability of the watch app (junder
 - The watch's labels for built-ins 1/2 ("Right"/"Left") and 6/7 ("Radar"/"Curious") name the wrong animations. A watch bug; the phone labels them by what they play ([ADR 0006](../adrs/0006-the-animate-tab-plays-without-a-playing-state.md)).
 - A frequency control for auto-animate: the watch offers only on/off ([ADR 0006](../adrs/0006-the-animate-tab-plays-without-a-playing-state.md)).
 - The watch's calibration Cancel resets its sliders without sending, so the ears keep the change. A watch bug ([ADR 0007](../adrs/0007-servo-calibration-is-live-with-revert-and-the-ears-tab-drops-firmware-version.md)).
+- The watch adopting GET_STATE to fix its lighting and auto-animate reads, which fail today: a watch fix, not needed for the watch to keep working ([ADR 0008](../adrs/0008-the-ears-report-their-state-through-a-get-state-store-request.md)).
