@@ -39,10 +39,11 @@ A parity spec, plus lighting profiles: every capability of the watch app (junder
 - [How does the Glow tab behave in each of its states?](https://trello.com/c/9TNiYRbD): one scrolling page below the profile bar: colours, mode chips, speed (disabled in Solid), brightness. Tap a swatch to edit it in a live picker sheet where Cancel reverts; drag reorders on drop; delete undoes; 1 to 32 colours. Lighting writes go latest-wins, one in flight. [ADR 0010](../adrs/0010-glow-edits-colours-in-a-live-picker-and-writes-latest-wins.md)
 - [How does the phone wait for a usable MTU before relying on it?](https://trello.com/c/uTQaAmmx): it trusts the ears' CAPABILITY, not the plugin's MTU. Android requests 512; CAPABILITY is re-sent for up to 2 s until `max_chunk_bytes` fits a full lighting frame (100), else the connect fails as "Couldn't connect". [ADR 0011](../adrs/0011-the-phone-waits-on-the-ears-capability-for-a-usable-mtu.md)
 - [How is the phone's protocol layer tested without ears attached?](https://trello.com/c/gKScNJbs): off-device, against a stateful fake ears installed as universal_ble's platform, with golden bytes from a new control-protocol fixture kept beside `ble-protocol.md` and copied with a drift check. Timers run on a fake clock; codec, session, and widget tests. The Android phone runs a manual checklist, and a macOS target approximates iOS. [ADR 0012](../adrs/0012-the-protocol-layer-is-tested-against-a-fake-ears-platform-and-shared-fixtures.md)
+- [How is the decided behavior sliced into vertical implementation cards?](https://trello.com/c/3jWRw1mY): contract first, then a walking-skeleton connect card that brings in the test harness and CI, then one Backlog card per behavior: 2 in robo-cat-ears, 10 in the app. Glow splits at the write path, and the connect prompt ships with profiles. [ADR 0013](../adrs/0013-the-build-is-sliced-contract-first-into-behavior-cards.md)
 
 ## Not yet specified
 
-- Ears firmware: the auto-animate task and a played animation can drive the servos at the same time, with nothing making one wait. Affects the watch too; no phone decision depends on it yet.
+Nothing: the way to the destination is clear.
 
 ## Out of scope
 
@@ -58,3 +59,4 @@ A parity spec, plus lighting profiles: every capability of the watch app (junder
 - The watch's calibration Cancel resets its sliders without sending, so the ears keep the change. A watch bug ([ADR 0007](../adrs/0007-servo-calibration-is-live-with-revert-and-the-ears-tab-drops-firmware-version.md)).
 - The watch adopting GET_STATE to fix its lighting and auto-animate reads, which fail today: a watch fix, not needed for the watch to keep working ([ADR 0008](../adrs/0008-the-ears-report-their-state-through-a-get-state-store-request.md)).
 - Exporting, importing, sharing, or syncing lighting profiles: ADR 0003 keeps profiles per phone ([ADR 0009](../adrs/0009-profiles-are-managed-from-a-bar-on-glow-and-edits-stay-linked-to-their-profile.md)).
+- Auto-animate and a played animation driving the servos at once: an ears firmware issue for every controller that no phone decision needs. Tracked as [Auto-animate and a played animation can drive the servos at once](https://trello.com/c/KnV0rJe5).
