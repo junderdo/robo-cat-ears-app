@@ -15,7 +15,7 @@ A parity spec, plus lighting profiles: every capability of the watch app (junder
   - **Glow**: up to 32 colours to add, reorder, and delete, with a colour picker; 5 modes plus speed; brightness applied on the phone with gamma; colours and brightness saved on the phone.
   - **Servo calibration**: four axes, sent live.
   - **Lighting profiles**: beyond the watch, added by [ADR 0003](../adrs/0003-lighting-lives-in-per-phone-profiles.md).
-- Android and iOS from one BLE stack; `flutter_blue_plus` fits the protocol, pending its licence. Test hardware: an Android phone and a Mac; no iPhone, so iOS BLE behavior is specified but verified later.
+- Android and iOS from one BLE stack: `universal_ble` ([ADR 0004](../adrs/0004-universal-ble-carries-the-ears-protocol.md)). Test hardware: an Android phone and a Mac; no iPhone, so iOS BLE behavior is specified but verified later.
 - The wire contract is `robo-cat-ears/docs/ble-protocol.md`. The ears accept one controller at a time, so the phone and the watch cannot both be connected.
 - Watch reference: `robo-cat-ears-watch/components/brookesia_app_robo_cat_ears/` (screens) and `components/services/` (BLE, animation store, lighting). Related ADRs live in `milk-lab-creations/docs/adr/`.
 - Pre-1.0: the phone may require current ears firmware, and firmware changes are in scope where a decision needs them. Ears firmware tickets carry the `ears-firmware` label too. The shipped watch must keep working, through a companion watch update if needed.
@@ -29,6 +29,7 @@ A parity spec, plus lighting profiles: every capability of the watch app (junder
 - [How are the four capabilities laid out as phone screens?](https://trello.com/c/xlsoi2vr): Connect is a gate, and the controls sit behind it in a bottom navigation bar, Animate | Glow | Ears. Ears holds Disconnect and a full-page servo calibration; every not-connected state lives on the gate; portrait-only phone layouts. [ADR 0002](../adrs/0002-controls-sit-behind-a-connect-gate.md)
 - [Are saved glow colours and brightness per phone or per ears?](https://trello.com/c/gGiccVK5): per phone, as named lighting profiles. Glow edits write live; on connect the phone reads the ears' lighting and auto-animate through a new firmware read, and asks before replacing unsaved lighting; ears without the read are out of date. [ADR 0003](../adrs/0003-lighting-lives-in-per-phone-profiles.md)
 - [Amend the BLE protocol contract to admit a native phone client](https://trello.com/c/FuZ6FsUa): done. The phone is a supported, play-only client with no wire change; §13 now rules out only the web app on iOS. `robo-cat-ears/docs/ble-protocol.md` and `milk-lab-creations/docs/adr/0003-a-native-phone-app-is-a-supported-client.md`, on each repo's `docs/phone-client-contract` branch
+- [Which BLE plugin carries the ears protocol, given flutter_blue_plus's licence?](https://trello.com/c/3gG1mEVn): `universal_ble` (BSD-3). flutter_blue_plus 2.x's licence adds restrictions GPL-3.0 forbids, so it can't ship in this app, for-profit or not. [ADR 0004](../adrs/0004-universal-ble-carries-the-ears-protocol.md)
 
 ## Not yet specified
 
